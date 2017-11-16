@@ -98,6 +98,26 @@ NSLocalizedStringFromTableInBundle(key, @"DateTools", [NSBundle bundleWithPath:[
 + (NSDate *)dateWithString:(NSString *)dateString formatString:(NSString *)formatString timeZone:(NSTimeZone *)timeZone;
 
 
+#pragma mark - 添加
+- (NSDate *)firstDayOfMonth;
+- (NSDate *)firstMonthDateCallDateForIndexPath:(NSInteger)index;
+- (NSInteger)indexPathForFirstMonthDate;
+
+- (NSDate *)preivousMonth;
+- (NSDate *)nextMonth;
+
+- (BOOL)isSameMonth:(NSDate *)date;
+- (BOOL)isPreviousMonth:(NSDate *)date;
+- (BOOL)isNextMonth:(NSDate *)date;
+- (NSInteger)monthLaterOrEarlierThan:(NSDate *)date;
++ (NSInteger)timestampWithDateString:(NSString *)dateString formatString:(NSString *)format;
+
++ (NSString *)timeShowFormatWithTimestamp:(NSInteger)timestamp;//app显示时间的格式
+
++ (NSInteger)ageWithBirthdayTimestamp:(NSInteger)timestamp;
+
+
+
 #pragma mark - Date Editing
 #pragma mark Date By Adding
 - (NSDate *)dateByAddingYears:(NSInteger)years;

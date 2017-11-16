@@ -520,6 +520,22 @@
             return NO;
         }
     }
+    else if (interval == DTTimePeriodLeftClosedRightOpen){
+        if ([self.StartDate isEarlierThanOrEqualTo:date] && [self.EndDate isLaterThan:date]) {
+            return YES;
+        }
+        else {
+            return NO;
+        }
+    }
+    else if (interval == DTTimePeriodLeftOpenRightClosed){
+        if ([self.StartDate isEarlierThan:date] && [self.EndDate isLaterThanOrEqualTo:date]) {
+            return YES;
+        }
+        else {
+            return NO;
+        }
+    }
     
     return NO;
 }

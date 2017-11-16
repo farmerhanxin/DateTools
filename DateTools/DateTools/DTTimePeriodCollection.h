@@ -32,6 +32,7 @@
 -(void)addTimePeriod:(DTTimePeriod *)period;
 -(void)insertTimePeriod:(DTTimePeriod *)period atIndex:(NSInteger)index;
 -(void)removeTimePeriodAtIndex:(NSInteger)index;
+-(void)removeAllTimePeriods;
 
 #pragma mark - Sorting
 -(void)sortByStartAscending;

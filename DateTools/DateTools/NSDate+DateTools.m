@@ -828,6 +828,128 @@ static NSCalendar *implicitCalendar = nil;
 }
 
 
+#pragma mark - 添加
+/**
+ *  return a date representing the receivers date first day's date
+ *
+ *  @param pDate NSDate - receiversdate
+ *
+ *  @return the receivers date first day's date
+ */
+- (NSDate *)firstDayOfMonth{
+    NSCalendar *calendar = [[self class] implicitCalendar];
+    NSDateComponents *components = [calendar
+                                    components:NSMonthCalendarUnit|NSYearCalendarUnit
+                                    fromDate:self];
+    NSDate *date = [calendar dateFromComponents:components];
+    return date;
+}
+
+
+- (NSDate *)firstMonthDateCallDateForIndexPath:(NSInteger)index{
+    NSCalendar *calendar = [NSCalendar currentCalendar];
+    NSInteger ordinalityOfFirstDay = [calendar ordinalityOfUnit:NSDayCalendarUnit
+                                                         inUnit:NSWeekCalendarUnit
+                                                        forDate:self];
+    NSDateComponents *dateComponents = [NSDateComponents new];
+    dateComponents.day = (1 - ordinalityOfFirstDay) + index;
+    NSDate *indexDate = [calendar dateByAddingComponents:dateComponents toDate:self options:0];
+    return indexDate;
+}
+
+
+- (NSInteger)indexPathForFirstMonthDate{
+    NSCalendar *calendar = [NSCalendar currentCalendar];
+    NSDate *firstMonthDate = [self firstDayOfMonth];
+    NSInteger ordinalityOfFirstDay = [calendar ordinalityOfUnit:NSDayCalendarUnit
+                                                         inUnit:NSWeekCalendarUnit
+                                                        forDate:firstMonthDate];
+    NSInteger offerDays =  [self daysFrom:firstMonthDate calendar:calendar];
+    NSInteger row = ordinalityOfFirstDay - 1 + offerDays;
+    return row;
+}
+
+
+- (NSDate *)nextMonth{
+    
+    return [self dateByAddingMonths:1];
+}
+
+- (NSDate *)preivousMonth{
+    
+    return [self dateBySubtractingMonths:1];
+}
+
+- (BOOL)isSameMonth:(NSDate *)date{
+    return (date.year == self.year) && (self.month == date.month);
+}
+
+- (BOOL)isNextMonth:(NSDate *)date{
+    
+    NSDate *previousDate = [self preivousMonth];
+    return (previousDate.month == date.month) && (previousDate.year == date.year);
+}
+
+
+- (BOOL)isPreviousMonth:(NSDate *)date{
+    
+    NSDate *nextDate = [self nextMonth];
+    return (nextDate.month == date.month) && (nextDate.year == date.year);
+}
+
+
+- (NSInteger)monthLaterOrEarlierThan:(NSDate *)date{
+    
+    NSInteger moths = 0;
+    
+    NSCalendar *calendar = [[self class] implicitCalendar];
+    NSDate *earliest = [self earlierDate:date];
+    NSDate *latest = (earliest == self) ? date : self;
+    NSInteger multiplier = (earliest == self) ? -1 : 1;
+    NSDateComponents *components = [calendar components:allCalendarUnitFlags fromDate:earliest toDate:latest options:0];
+    moths = multiplier*(components.month + 12*components.year);
+    moths = (moths == 0)? ([earliest isPreviousMonth:latest] ?  multiplier : 0) : (multiplier == 1? moths+1 : moths);
+    return moths;
+}
+
+
++ (NSInteger)timestampWithDateString:(NSString *)dateString formatString:(NSString *)format{
+    NSDate *date = [NSDate dateWithString:dateString formatString:format];
+    return [date timeIntervalSince1970];
+}
+
+
++ (NSString *)timeShowFormatWithTimestamp:(NSInteger)timestamp{
+    NSDate *date = [NSDate dateWithTimeIntervalSince1970:timestamp];
+    if(date.isToday){
+        return [NSString stringWithFormat:@"%02ld:%02ld",date.hour,date.minute];
+    }else{
+        return [NSString stringWithFormat:@"%02ld月%02ld日",date.month,date.day];
+    }
+}
+
++ (NSInteger)ageWithBirthdayTimestamp:(NSInteger)timestamp {
+    
+    NSInteger age = 1;
+    NSDate *newDate = [NSDate date];
+    NSDate *birDate = [NSDate dateWithTimeIntervalSince1970:timestamp];
+    
+    age = newDate.year - birDate.year;
+    
+    if(age > 0) {
+        age = newDate.month > birDate.month ?
+    age: (newDate.month == birDate.month ?
+          (age = newDate.day - birDate.day >=0 ?
+           age  : age - 1) : age -1);
+    }else{
+        age = 1;
+    }
+    return age;
+}
+
+
+
+
 #pragma mark - Date Editing
 #pragma mark Date By Adding
 /**

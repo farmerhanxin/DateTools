@@ -47,6 +47,12 @@
     periods[index] = obj;
 }
 
+
+- (NSInteger)indexOfPeriod:(DTTimePeriod *)period{
+    return [periods indexOfObject:period];
+}
+
+
 #pragma mark - Group Info
 /**
  *  Returns the duration of the receiver in years

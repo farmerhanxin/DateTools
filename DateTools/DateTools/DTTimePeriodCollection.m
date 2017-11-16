@@ -101,6 +101,11 @@
 }
 
 
+- (void)removeAllTimePeriods{
+    [periods removeAllObjects];
+    [self setVariablesNil];
+}
+
 
 #pragma mark - Sorting
 /**

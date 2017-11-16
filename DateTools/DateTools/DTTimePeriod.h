@@ -52,7 +52,9 @@ typedef NS_ENUM(NSUInteger, DTTimePeriodSize) {
 
 typedef NS_ENUM(NSUInteger, DTTimePeriodInterval) {
     DTTimePeriodIntervalOpen,
-    DTTimePeriodIntervalClosed
+    DTTimePeriodIntervalClosed,
+    DTTimePeriodLeftClosedRightOpen,
+    DTTimePeriodLeftOpenRightClosed
 };
 
 typedef NS_ENUM(NSUInteger, DTTimePeriodAnchor) {
